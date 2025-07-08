@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Product | Expiry Tracker</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fefae0] text-[#2c3e50] font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center shadow">
+    <div class="text-xl font-bold">Add Product</div>
+    <a href="index.html" class="bg-white text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50 shadow">⬅ Back to Dashboard</a>
+  </nav>
+
+  <!-- Container -->
+  <div class="max-w-4xl mx-auto mt-10 space-y-10">
+
+    <!-- QR Code Scan Section -->
+    <!-- QR Code Scan Section -->
+<section class="bg-white p-6 rounded-xl shadow">
+  <h2 class="text-lg font-semibold mb-4">📷 Add via QR Code</h2>
+  <div id="qr-reader" class="w-full md:w-2/3 mx-auto"></div>
+  <div class="text-sm text-gray-600 mt-4">OR upload a QR code image:</div>
+  <input type="file" id="qr-file" accept="image/*" class="mt-2 border p-2 rounded w-full md:w-2/3" />
+</section>
+
+
+    <!-- Manual Entry Section -->
+    <section class="bg-white p-6 rounded-xl shadow">
+      <h2 class="text-lg font-semibold mb-4">📝 Add Manually</h2>
+      <form id="manualForm" class="space-y-4">
+        <input type="text" id="productName" placeholder="Product Name" class="w-full px-4 py-2 border rounded">
+        <input type="date" id="expiryDate" class="w-full px-4 py-2 border rounded">
+        <input type="number" id="quantity" placeholder="Quantity" class="w-full px-4 py-2 border rounded">
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Product</button>
+      </form>
+    </section>
+
+    <!-- Delete Section -->
+    <section class="bg-white p-6 rounded-xl shadow">
+      <h2 class="text-lg font-semibold mb-4">🗑 Delete Product</h2>
+      <p class="text-sm text-gray-600 mb-2">Enter the product name you want to delete:</p>
+      <form id="deleteForm" class="flex gap-4">
+        <input type="text" id="deleteName" placeholder="Product Name" class="px-4 py-2 border rounded w-full">
+        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
+      </form>
+    </section>
+
+  </div>
+
+  <script>
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    // Manual Form Submit
+    document.getElementById("manualForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("productName").value;
+      const expiry = document.getElementById("expiryDate").value;
+      const quantity = parseInt(document.getElementById("quantity").value);
+
+      const product = { name, expiry, quantity };
+      products.push(product);
+      localStorage.setItem("products", JSON.stringify(products));
+      alert("✅ Product added!");
+      e.target.reset();
+    });
+
+    // Delete Product
+    document.getElementById("deleteForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameToDelete = document.getElementById("deleteName").value.toLowerCase().trim();
+      const filtered = products.filter(p => p.name.toLowerCase() !== nameToDelete);
+
+      if (filtered.length === products.length) {
+        alert("❌ Product not found!");
+        return;
+      }
+
+      products = filtered;
+      localStorage.setItem("products", JSON.stringify(products));
+      alert("🗑 Product deleted!");
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>

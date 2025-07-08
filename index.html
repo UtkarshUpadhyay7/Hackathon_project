@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expiry Wise Shelf Guardian</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 text-[#2c3e50] font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center rounded-b-xl shadow">
+    <div class="text-xl font-bold">Expiry Wise Shelf Guardian</div>
+    <div class="text-sm italic">Smart inventory management with database storage</div>
+  </nav>
+
+  <!-- Header Buttons -->
+  <div class="flex justify-end items-center gap-4 px-6 mt-4">
+    <button class="bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600 shadow">🔺  Alerts</button>
+    <a href="product.html" class="bg-white text-green-600 px-4 py-2 rounded-full border border-green-500 text-sm hover:bg-green-50 shadow">➕ Add Product</a>
+
+    </div>
+
+  <!-- Tabs -->
+  <div class="flex space-x-4 px-6 mt-6">
+    <button class="bg-white px-4 py-2 rounded-full shadow font-semibold">📊 Dashboard</button>
+    <button class="text-gray-600 hover:text-black px-4 py-2">📦 Inventory</button>
+    <button class="text-gray-600 hover:text-black px-4 py-2">⚙ Settings</button>
+  </div>
+
+  <!-- Dashboard Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6 px-6">
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Total Products</div>
+      <div class="text-xl font-bold text-blue-600"></div>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Fresh Items</div>
+      <div class="text-xl font-bold text-green-600"></div>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Warning Items</div>
+      <div class="text-xl font-bold text-yellow-500"></div>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Expired Items</div>
+      <div class="text-xl font-bold text-red-500"></div>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Low Stock</div>
+      <div class="text-xl font-bold text-orange-500"></div>
+    </div>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+      <div class="text-sm">Total Value</div>
+      <div class="text-xl font-bold text-purple-600"></div>
+    </div>
+  </div>
+
+  
+
+  <!-- Quick Stats -->
+  <div class="bg-white p-6 mt-8 mx-6 rounded-xl shadow text-center">
+    <h3 class="text-lg font-semibold mb-4">📊 Quick Stats</h3>
+    <div class="flex justify-around text-sm md:text-base">
+      <div><span class="font-bold"></span><br>Total Items</div>
+      <div><span class="font-bold text-green-600"></span><br>Fresh Items</div>
+      <div><span class="font-bold text-purple-600"></span><br>Total Value</div>
+      <div><span class="font-bold text-orange-600"></span><br>Avg. Value</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center text-sm text-gray-500 py-6 mt-8">
+    💡 Built with 💚 by Our Team | Hackathon 2025
+  </footer>
+
+</body>
+</html>
