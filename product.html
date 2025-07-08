@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Management | Expiry Tracker</title>
     <script
       src="https://unpkg.com/html5-qrcode"
@@ -17,6 +18,9 @@
       <h1 class="text-xl font-bold">🛒 Product Management</h1>
       <a href="index.html" class="text-white underline">← Back to Dashboard</a>
     </nav>
+
+    <!-- Status Message -->
+    <div id="message" class="text-center text-white font-bold py-2 hidden"></div>
 
     <!-- Buttons -->
     <div class="flex justify-center gap-4 mt-6">
@@ -41,6 +45,10 @@
         🗑 Delete Product
       </button>
     </div>
+
+    <br /><br /><br />
+
+    <img src="TROLLY.gif" alt="Animated GIF" width="1000" />
 
     <div class="max-w-3xl mx-auto mt-8 space-y-10">
       <!-- Manual Entry -->
@@ -107,6 +115,9 @@
       </section>
     </div>
 
+    <!-- Hidden QR container -->
+    <div id="qr-reader-temp" style="display: none"></div>
+
     <script>
       // Show correct section
       function showSection(id) {
@@ -115,6 +126,22 @@
         });
         document.getElementById(id).classList.remove("hidden");
       }
+
+      // Show message
+      function showMessage(msg, type = "success") {
+        const el = document.getElementById("message");
+        el.textContent = msg;
+        el.className =
+          "text-center text-white font-bold py-2 " +
+          (type === "success" ? "bg-green-500" : "bg-red-500");
+        el.classList.remove("hidden");
+        setTimeout(() => el.classList.add("hidden"), 3000);
+      }
+
+      // On load, show manual section by default
+      window.onload = () => {
+        showSection("manual");
+      };
 
       // Manual Form Submit
       document.getElementById("manualForm").addEventListener("submit", (e) => {
@@ -135,11 +162,11 @@
         })
           .then((res) => {
             if (!res.ok) throw new Error("Failed to add");
-            alert("✅ Product added to database!");
+            showMessage("✅ Product added to database!", "success");
             e.target.reset();
           })
           .catch((err) => {
-            alert("❌ Error saving product");
+            showMessage("❌ Error saving product", "error");
             console.error(err);
           });
       });
@@ -148,46 +175,52 @@
       document.getElementById("qr-file").addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        const qrReader = new Html5Qrcode("qr-reader-temp"); // Hidden div
-        qrReader
-          .scanFile(file, true)
-          .then((decoded) => {
-            const [name, expiryDate, quantity] = decoded.split("|");
-            const product = { name, expiryDate, quantity: parseInt(quantity) };
 
-            fetch("http://localhost:8080/api/products", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(product),
-            })
-              .then((res) => {
-                if (!res.ok) throw new Error("Failed to add");
-                alert("✅ Product added from QR!");
+        if (typeof Html5Qrcode !== "undefined") {
+          const qrReader = new Html5Qrcode("qr-reader-temp");
+          qrReader
+            .scanFile(file, true)
+            .then((decoded) => {
+              const [name, expiryDate, quantity] = decoded.split("|");
+              const product = {
+                name,
+                expiryDate,
+                quantity: parseInt(quantity),
+              };
+
+              fetch("http://localhost:8080/api/products", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(product),
               })
-              .catch((err) => alert("❌ QR Upload Failed"));
-          })
-          .catch(() => alert("❌ Invalid QR Code"));
+                .then((res) => {
+                  if (!res.ok) throw new Error("Failed to add");
+                  showMessage("✅ Product added from QR!", "success");
+                  document.getElementById("qr-file").value = "";
+                })
+                .catch((err) => showMessage("❌ QR Upload Failed", "error"));
+            })
+            .catch(() => showMessage("❌ Invalid QR Code", "error"));
+        } else {
+          showMessage("❌ QR Scanner not available", "error");
+        }
       });
 
       // Delete Product
       document.getElementById("deleteForm").addEventListener("submit", (e) => {
         e.preventDefault();
         const name = document.getElementById("deleteName").value.trim();
-        if (!name) return alert("Enter valid name");
+        if (!name) return showMessage("⚠️ Enter valid product name", "error");
 
-       fetch(`http://localhost:8080/api/products/${name}`, {
-
+        fetch(`http://localhost:8080/api/products/${name}`, {
           method: "DELETE",
         })
           .then((res) => {
-            if (res.ok) alert("🗑 Product deleted!");
+            if (res.ok) showMessage("🗑 Product deleted!", "success");
             else throw new Error("Not found");
           })
-          .catch(() => alert("❌ Deletion failed"));
+          .catch(() => showMessage("❌ Deletion failed", "error"));
       });
     </script>
-
-    <!-- Hidden QR container -->
-    <div id="qr-reader-temp" style="display: none"></div>
   </body>
 </html>
