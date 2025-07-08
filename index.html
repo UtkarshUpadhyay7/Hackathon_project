@@ -1,77 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Expiry Wise Shelf Guardian</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 text-[#2c3e50] font-sans">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Expiry Wise Shelf Guardian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 text-[#2c3e50] font-sans"
+  >
+    <!-- Navbar -->
+    <nav
+      class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center rounded-b-xl shadow"
+    >
+      <div class="text-xl font-bold">Expiry Wise Shelf Guardian</div>
+      <div class="text-sm italic">
+        Smart inventory management with database storage
+      </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center rounded-b-xl shadow">
-    <div class="text-xl font-bold">Expiry Wise Shelf Guardian</div>
-    <div class="text-sm italic">Smart inventory management with database storage</div>
-  </nav>
-
-  <!-- Header Buttons -->
-  <div class="flex justify-end items-center gap-4 px-6 mt-4">
-    <button class="bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600 shadow">🔺  Alerts</button>
-    <a href="product.html" class="bg-white text-green-600 px-4 py-2 rounded-full border border-green-500 text-sm hover:bg-green-50 shadow">➕ Add Product</a>
-
+    <!-- Header Buttons -->
+    <div class="flex justify-end items-center gap-4 px-6 mt-4">
+      <button
+        class="bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600 shadow"
+      >
+        🔺 Alerts
+      </button>
+      <a
+        href="product.html"
+        class="bg-white text-green-600 px-4 py-2 rounded-full border border-green-500 text-sm hover:bg-green-50 shadow"
+        >➕ Add Product</a
+      >
     </div>
 
-  <!-- Tabs -->
-  <div class="flex space-x-4 px-6 mt-6">
-    <button class="bg-white px-4 py-2 rounded-full shadow font-semibold">📊 Dashboard</button>
-    <button class="text-gray-600 hover:text-black px-4 py-2">📦 Inventory</button>
-    <button class="text-gray-600 hover:text-black px-4 py-2">⚙ Settings</button>
-  </div>
+    <!-- Only Dashboard Button -->
+    <div class="flex space-x-4 px-6 mt-6">
+      <button class="bg-white px-4 py-2 rounded-full shadow font-semibold">
+        📊 Dashboard
+      </button>
+    </div>
 
-  <!-- Dashboard Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6 px-6">
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Total Products</div>
-      <div class="text-xl font-bold text-blue-600"></div>
+    <!-- Dashboard Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6 px-6">
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Total Products</div>
+        <div id="totalProducts" class="text-xl font-bold text-blue-600">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Fresh Items</div>
+        <div id="freshItems" class="text-xl font-bold text-green-600">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Warning Items</div>
+        <div id="warningItems" class="text-xl font-bold text-yellow-500">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Expired Items</div>
+        <div id="expiredItems" class="text-xl font-bold text-red-500">0</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Low Stock</div>
+        <div id="lowStockItems" class="text-xl font-bold text-orange-500">
+          0
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="text-sm">Total Value</div>
+        <div id="totalValue" class="text-xl font-bold text-purple-600">₹0</div>
+      </div>
     </div>
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Fresh Items</div>
-      <div class="text-xl font-bold text-green-600"></div>
-    </div>
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Warning Items</div>
-      <div class="text-xl font-bold text-yellow-500"></div>
-    </div>
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Expired Items</div>
-      <div class="text-xl font-bold text-red-500"></div>
-    </div>
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Low Stock</div>
-      <div class="text-xl font-bold text-orange-500"></div>
-    </div>
-    <div class="bg-white p-4 rounded-xl shadow text-center">
-      <div class="text-sm">Total Value</div>
-      <div class="text-xl font-bold text-purple-600"></div>
-    </div>
-  </div>
 
-  
-
-  <!-- Quick Stats -->
-  <div class="bg-white p-6 mt-8 mx-6 rounded-xl shadow text-center">
-    <h3 class="text-lg font-semibold mb-4">📊 Quick Stats</h3>
-    <div class="flex justify-around text-sm md:text-base">
-      <div><span class="font-bold"></span><br>Total Items</div>
-      <div><span class="font-bold text-green-600"></span><br>Fresh Items</div>
-      <div><span class="font-bold text-purple-600"></span><br>Total Value</div>
-      <div><span class="font-bold text-orange-600"></span><br>Avg. Value</div>
+    <!-- Quick Stats -->
+    <div class="bg-white p-6 mt-8 mx-6 rounded-xl shadow text-center">
+      <h3 class="text-lg font-semibold mb-4">📊 Quick Stats</h3>
+      <div class="flex justify-around text-sm md:text-base">
+        <div>
+          <span id="qs-total" class="font-bold">0</span><br />Total Items
+        </div>
+        <div>
+          <span id="qs-fresh" class="font-bold text-green-600">0</span
+          ><br />Fresh Items
+        </div>
+        <div>
+          <span id="qs-value" class="font-bold text-purple-600">₹0</span
+          ><br />Total Value
+        </div>
+        <div>
+          <span id="qs-avg" class="font-bold text-orange-600">₹0</span
+          ><br />Avg. Value
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <footer class="text-center text-sm text-gray-500 py-6 mt-8">
-    💡 Built with 💚 by Our Team | Hackathon 2025
-  </footer>
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-500 py-6 mt-8">
+      💡 Built with 💚 by Our Team | Hackathon 2025
+    </footer>
 
-</body>
+    <!-- JS to fetch and render dashboard data -->
+    <script>
+      fetch("http://localhost:8080/api/products")
+        .then((res) => res.json())
+        .then((data) => {
+          const total = data.length;
+          const today = new Date().toISOString().split("T")[0];
+
+          const fresh = data.filter((p) => p.expiry >= today).length;
+          const expired = data.filter((p) => p.expiry < today).length;
+          const lowStock = data.filter((p) => p.quantity <= 5).length;
+          const warning = data.filter((p) => {
+            const daysLeft =
+              (new Date(p.expiry) - new Date()) / (1000 * 60 * 60 * 24);
+            return daysLeft > 0 && daysLeft <= 5;
+          }).length;
+
+          const totalValue = data.reduce((sum, p) => sum + p.quantity * 10, 0); // ₹10 per item
+          const avgValue = total > 0 ? (totalValue / total).toFixed(2) : 0;
+
+         document.getElementById("totalProducts").innerText = total;
+document.getElementById("freshItems").innerText = fresh;
+document.getElementById("expiredItems").innerText = expired;
+document.getElementById("lowStockItems").innerText = lowStock;
+document.getElementById("warningItems").innerText = warning;
+document.getElementById("totalValue").innerText = `₹${totalValue}`;
+
+document.getElementById("qs-total").innerText = total;
+document.getElementById("qs-fresh").innerText = fresh;
+document.getElementById("qs-value").innerText = `₹${totalValue}`;
+document.getElementById("qs-avg").innerText = `₹${avgValue}`;
+
+
+        })
+        .catch((err) => {
+          console.error("❌ Error fetching data:", err);
+        });
+    </script>
+  </body>
 </html>

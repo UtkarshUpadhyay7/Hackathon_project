@@ -1,89 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Add Product | Expiry Tracker</title>
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-[#fefae0] text-[#2c3e50] font-sans">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Product Management | Expiry Tracker</title>
+    <script
+      src="https://unpkg.com/html5-qrcode"
+      type="text/javascript"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#fefae0] text-[#2c3e50] font-sans">
+    <!-- Navbar -->
+    <nav
+      class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow"
+    >
+      <h1 class="text-xl font-bold">🛒 Product Management</h1>
+      <a href="index.html" class="text-white underline">← Back to Dashboard</a>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center shadow">
-    <div class="text-xl font-bold">Add Product</div>
-    <a href="index.html" class="bg-white text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50 shadow">⬅ Back to Dashboard</a>
-  </nav>
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-6">
+      <a
+        href="entermanually.html"
+        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+      >
+        📝 Enter Manually
+      </a>
 
-  <!-- Container -->
-  <div class="max-w-4xl mx-auto mt-10 space-y-10">
+      <a
+        href="uploadqr.html"
+        class="bg-purple-500 text-white px-6 py-2 rounded hover:bg-purple-600 text-center"
+      >
+        📷 Upload QR Code
+      </a>
 
-    <!-- QR Code Scan Section -->
-    <!-- QR Code Scan Section -->
-<section class="bg-white p-6 rounded-xl shadow">
-  <h2 class="text-lg font-semibold mb-4">📷 Add via QR Code</h2>
-  <div id="qr-reader" class="w-full md:w-2/3 mx-auto"></div>
-  <div class="text-sm text-gray-600 mt-4">OR upload a QR code image:</div>
-  <input type="file" id="qr-file" accept="image/*" class="mt-2 border p-2 rounded w-full md:w-2/3" />
-</section>
+      <button
+        onclick="showSection('delete')"
+        class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+      >
+        🗑 Delete Product
+      </button>
+    </div>
 
+    <div class="max-w-3xl mx-auto mt-8 space-y-10">
+      <!-- Manual Entry -->
+      <section id="manual" class="bg-white p-6 rounded-xl shadow hidden">
+        <h2 class="text-lg font-bold mb-4">📝 Manual Product Entry</h2>
+        <form id="manualForm" class="grid gap-4">
+          <input
+            type="text"
+            id="productName"
+            placeholder="Product Name *"
+            required
+            class="px-4 py-2 border rounded"
+          />
+          <input
+            type="date"
+            id="expiryDate"
+            required
+            class="px-4 py-2 border rounded"
+          />
+          <input
+            type="number"
+            id="quantity"
+            placeholder="Quantity *"
+            required
+            class="px-4 py-2 border rounded"
+          />
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+          >
+            Save Product
+          </button>
+        </form>
+      </section>
 
-    <!-- Manual Entry Section -->
-    <section class="bg-white p-6 rounded-xl shadow">
-      <h2 class="text-lg font-semibold mb-4">📝 Add Manually</h2>
-      <form id="manualForm" class="space-y-4">
-        <input type="text" id="productName" placeholder="Product Name" class="w-full px-4 py-2 border rounded">
-        <input type="date" id="expiryDate" class="w-full px-4 py-2 border rounded">
-        <input type="number" id="quantity" placeholder="Quantity" class="w-full px-4 py-2 border rounded">
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Product</button>
-      </form>
-    </section>
+      <!-- QR Upload -->
+      <section id="qr" class="bg-white p-6 rounded-xl shadow hidden">
+        <h2 class="text-lg font-bold mb-4">📷 Upload QR Code Image</h2>
+        <input
+          type="file"
+          id="qr-file"
+          accept="image/*"
+          class="w-full p-2 border rounded"
+        />
+      </section>
 
-    <!-- Delete Section -->
-    <section class="bg-white p-6 rounded-xl shadow">
-      <h2 class="text-lg font-semibold mb-4">🗑 Delete Product</h2>
-      <p class="text-sm text-gray-600 mb-2">Enter the product name you want to delete:</p>
-      <form id="deleteForm" class="flex gap-4">
-        <input type="text" id="deleteName" placeholder="Product Name" class="px-4 py-2 border rounded w-full">
-        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
-      </form>
-    </section>
+      <!-- Delete Product -->
+      <section id="delete" class="bg-white p-6 rounded-xl shadow hidden">
+        <h2 class="text-lg font-bold mb-4">🗑 Delete Product</h2>
+        <form id="deleteForm" class="flex gap-4">
+          <input
+            type="text"
+            id="deleteName"
+            placeholder="Enter Product Name"
+            class="w-full px-4 py-2 border rounded"
+          />
+          <button
+            type="submit"
+            class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </form>
+      </section>
+    </div>
 
-  </div>
-
-  <script>
-    let products = JSON.parse(localStorage.getItem("products")) || [];
-
-    // Manual Form Submit
-    document.getElementById("manualForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = document.getElementById("productName").value;
-      const expiry = document.getElementById("expiryDate").value;
-      const quantity = parseInt(document.getElementById("quantity").value);
-
-      const product = { name, expiry, quantity };
-      products.push(product);
-      localStorage.setItem("products", JSON.stringify(products));
-      alert("✅ Product added!");
-      e.target.reset();
-    });
-
-    // Delete Product
-    document.getElementById("deleteForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nameToDelete = document.getElementById("deleteName").value.toLowerCase().trim();
-      const filtered = products.filter(p => p.name.toLowerCase() !== nameToDelete);
-
-      if (filtered.length === products.length) {
-        alert("❌ Product not found!");
-        return;
+    <script>
+      // Show correct section
+      function showSection(id) {
+        ["manual", "qr", "delete"].forEach((sec) => {
+          document.getElementById(sec).classList.add("hidden");
+        });
+        document.getElementById(id).classList.remove("hidden");
       }
 
-      products = filtered;
-      localStorage.setItem("products", JSON.stringify(products));
-      alert("🗑 Product deleted!");
-      e.target.reset();
-    });
-  </script>
+      // Manual Form Submit
+      document.getElementById("manualForm").addEventListener("submit", (e) => {
+        e.preventDefault();
 
-</body>
+        const product = {
+          name: document.getElementById("productName").value,
+          expiryDate: document.getElementById("expiryDate").value,
+          quantity: parseInt(document.getElementById("quantity").value),
+        };
+
+        fetch("http://localhost:8080/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Failed to add");
+            alert("✅ Product added to database!");
+            e.target.reset();
+          })
+          .catch((err) => {
+            alert("❌ Error saving product");
+            console.error(err);
+          });
+      });
+
+      // QR Upload
+      document.getElementById("qr-file").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const qrReader = new Html5Qrcode("qr-reader-temp"); // Hidden div
+        qrReader
+          .scanFile(file, true)
+          .then((decoded) => {
+            const [name, expiryDate, quantity] = decoded.split("|");
+            const product = { name, expiryDate, quantity: parseInt(quantity) };
+
+            fetch("http://localhost:8080/api/products", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(product),
+            })
+              .then((res) => {
+                if (!res.ok) throw new Error("Failed to add");
+                alert("✅ Product added from QR!");
+              })
+              .catch((err) => alert("❌ QR Upload Failed"));
+          })
+          .catch(() => alert("❌ Invalid QR Code"));
+      });
+
+      // Delete Product
+      document.getElementById("deleteForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("deleteName").value.trim();
+        if (!name) return alert("Enter valid name");
+
+       fetch(`http://localhost:8080/api/products/${name}`, {
+
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) alert("🗑 Product deleted!");
+            else throw new Error("Not found");
+          })
+          .catch(() => alert("❌ Deletion failed"));
+      });
+    </script>
+
+    <!-- Hidden QR container -->
+    <div id="qr-reader-temp" style="display: none"></div>
+  </body>
 </html>
