@@ -1,13 +1,13 @@
 # 🧊 DoomShelf
 
 > AI-Powered Expiry Tracker & Inventory Management System  
-> Final Year Project | Built for Hackathon 2025
+>   Built for Hackathon 2025
 
 ---
 
 ## 🚀 Overview
 
-**DoomShelf** is a smart inventory and expiry tracking desktop app built with modern technologies like **Tauri**, **React**, and **Supabase**. Designed for individuals, small businesses, and retailers, DoomShelf makes it easy to manage stock, get expiry alerts, and track products using barcodes or manual entry.
+**DoomShelf** is a smart inventory and expiry tracking desktop app built with modern technologies like **Java**, **SpringBoot**, and **MySql**. Designed for individuals, small businesses, and retailers, DoomShelf makes it easy to manage stock, get expiry alerts, and track products using barcodes or manual entry.
 
 It features real-time updates, clean UI/UX, and supports OAuth login for secure access.
 
@@ -18,9 +18,7 @@ It features real-time updates, clean UI/UX, and supports OAuth login for secure 
 - 📦 **Add Products via Barcode or Manual Entry**
 - ⏰ **Expiry Date Tracking & Alerts**
 - 🧮 **Real-time Inventory Overview**
-- 🔍 **Search, Filter, and Sort Products**
-- 👥 **OAuth Login with User / Retailer / Guest Modes**
-- 🖼️ **Cross-platform Desktop App (Windows/Linux/Mac)**
+- 🔍 **Search, Filter, and Sort Produts
 - 🗂️ **Export Inventory to Excel or PDF**
 
 ---
