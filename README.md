@@ -40,3 +40,9 @@ It features real-time updates, clean UI/UX, and supports OAuth login for secure 
 
 ## 📁 Folder Structure
 
+├── frontend/ # React + Tauri UI
+├── backend/ # Java Spring Boot or Node API
+├── public/ # Static files
+├── src-tauri/ # Tauri config (Rust)
+└── README.md
+
