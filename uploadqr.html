@@ -1,131 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Upload QR | Expiry Tracker</title>
-    <script
-      src="https://unpkg.com/html5-qrcode"
-      type="text/javascript"
-    ></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-[#fefae0] text-[#2c3e50] font-sans">
-    <!-- Navbar -->
-    <nav
-      class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow"
-    >
-      <h1 class="text-xl font-bold">📷 Upload QR Code</h1>
-      <a href="index.html" class="text-white underline">← Back to Dashboard</a>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload QR | Expiry Tracker</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-    <!-- Container -->
-    <div
-      class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow space-y-6"
-    >
-      <!-- Upload QR -->
-      <section>
-        <h2 class="text-lg font-semibold mb-2">Upload QR Code Image</h2>
-        <input
-          type="file"
-          id="qr-file"
-          accept="image/*"
-          class="w-full p-2 border rounded"
-        />
-        <p class="text-sm text-gray-600 mt-2">Accepted format: .png, .jpg</p>
-      </section>
+<body class="bg-[#fefae0] text-[#2c3e50] font-sans">
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow">
+    <h1 class="text-xl font-bold">📷 Upload QR Code</h1>
+    <a href="index.html" class="text-white underline">← Back to Dashboard</a>
+  </nav>
 
-      <!-- Autofill Form -->
-      <form id="qrForm" class="space-y-4 hidden">
-        <h2 class="text-lg font-semibold">Autofilled Product Details</h2>
-        <input
-          type="text"
-          id="productName"
-          placeholder="Product Name"
-          class="w-full px-4 py-2 border rounded"
-          required
-        />
-        <input
-          type="date"
-          id="expiryDate"
-          class="w-full px-4 py-2 border rounded"
-          required
-        />
-        <input
-          type="number"
-          id="quantity"
-          placeholder="Quantity"
-          class="w-full px-4 py-2 border rounded"
-          required
-        />
-        <button
-          type="submit"
-          class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
-        >
-          ✅ Save to Database
-        </button>
-      </form>
-    </div>
+  <!-- Container -->
+  <div class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow space-y-6">
+    <!-- Upload QR -->
+    <section>
+      <h2 class="text-lg font-semibold mb-2">Upload QR Code Image</h2>
+      <input type="file" id="qr-file" accept="image/*" class="w-full p-2 border rounded" />
+      <p class="text-sm text-gray-600 mt-2">Accepted format: .png, .jpg</p>
+    </section>
 
-    <!-- QR Decode + Form Submission Script -->
-    <script>
-      document.getElementById("qr-file").addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    <!-- Autofill Form -->
+    <form id="qrForm" class="space-y-4 hidden">
+      <h2 class="text-lg font-semibold">Autofilled Product Details</h2>
 
-        const qrReader = new Html5Qrcode("qr-reader-temp");
-        qrReader
-          .scanFile(file, true)
-          .then((decodedText) => {
-            const parts = decodedText.split("|");
+      <input type="text" id="productName" placeholder="Product Name" class="w-full px-4 py-2 border rounded" required />
+      <input type="date" id="expiryDate" class="w-full px-4 py-2 border rounded" required />
+      <input type="number" id="quantity" placeholder="Quantity" class="w-full px-4 py-2 border rounded" required />
+      <input type="date" id="manufacturingDate" class="w-full px-4 py-2 border rounded" required />
+      <input type="number" id="alertDays" placeholder="Alert Days" value="7" class="w-full px-4 py-2 border rounded" required />
 
-            if (parts.length !== 3) {
-              alert("❌ Invalid QR format. Use: name|expiry|quantity");
-              return;
-            }
+      <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+        ✅ Save to Database
+      </button>
+    </form>
+  </div>
 
-            // Autofill the form
-            document.getElementById("productName").value = parts[0];
-            document.getElementById("expiryDate").value = parts[1];
-            document.getElementById("quantity").value = parts[2];
+  <!-- Hidden QR Reader Div -->
+  <div id="qr-reader-temp" style="display: none"></div>
 
-            document.getElementById("qrForm").classList.remove("hidden");
-          })
-          .catch(() => {
-            alert("❌ Failed to read QR. Try again with a valid image.");
-          });
-      });
+  <!-- Script -->
+  <script>
+    document.getElementById("qr-file").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      // Submit Form to Backend
-      document.getElementById("qrForm").addEventListener("submit", (e) => {
-        e.preventDefault();
+      const qrReader = new Html5Qrcode("qr-reader-temp");
 
-        const product = {
-          name: document.getElementById("productName").value,
-          expiryDate: document.getElementById("expiryDate").value,
-          quantity: parseInt(document.getElementById("quantity").value),
-        };
+      try {
+        const decodedText = await qrReader.scanFile(file, true);
+        const parts = decodedText.split("|");
 
-        fetch("http://localhost:8080/api/products", {
+        if (parts.length !== 5) {
+          alert("❌ Invalid QR format. Expected format: name|expiryDate|quantity|mfgDate|alertDays");
+          return;
+        }
+
+        document.getElementById("productName").value = parts[0];
+        document.getElementById("expiryDate").value = parts[1];
+        document.getElementById("quantity").value = parts[2];
+        document.getElementById("manufacturingDate").value = parts[3];
+        document.getElementById("alertDays").value = parts[4];
+
+        document.getElementById("qrForm").classList.remove("hidden");
+      } catch (err) {
+        alert("❌ Failed to read QR code. Please upload a valid image.");
+        console.error("QR Scan Error:", err);
+      }
+    });
+
+    document.getElementById("qrForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const product = {
+        name: document.getElementById("productName").value,
+        expiryDate: document.getElementById("expiryDate").value,
+        quantity: parseInt(document.getElementById("quantity").value),
+        manufacturingDate: document.getElementById("manufacturingDate").value,
+        alertDays: parseInt(document.getElementById("alertDays").value),
+        category: "From QR",
+        price: 0.00,
+        supplier: "QR Upload",
+        purchaseDate: null
+      };
+
+      try {
+        const response = await fetch("http://localhost:8080/api/products/uploadQR", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(product),
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error("Failed to add");
-            alert("✅ Product added to database!");
-            e.target.reset();
-            document.getElementById("qrForm").classList.add("hidden");
-          })
-          .catch((err) => {
-            alert("❌ Error saving product");
-            console.error(err);
-          });
-      });
-    </script>
+        });
 
-    <!-- Hidden QR container -->
-    <div id="qr-reader-temp" style="display: none"></div>
-  </body>
+        if (!response.ok) throw new Error("Failed to save product");
+
+        const result = await response.text();
+        alert(✅ ${result});
+
+        // Show expiry alert if applicable
+        const today = new Date();
+        const expiry = new Date(product.expiryDate);
+        const alertBefore = new Date(expiry);
+        alertBefore.setDate(expiry.getDate() - product.alertDays);
+
+        if (today >= alertBefore) {
+          alert(⚠ Expiry Alert: "${product.name}" will expire on ${product.expiryDate});
+        }
+
+        e.target.reset();
+        document.getElementById("qrForm").classList.add("hidden");
+      } catch (err) {
+        alert("❌ Error saving product. See console for details.");
+        console.error("Save Error:", err);
+      }
+    });
+  </script>
+</body>
 </html>
