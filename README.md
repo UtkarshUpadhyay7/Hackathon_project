@@ -89,6 +89,6 @@ expiry-shelf-guardian-backend/
 | pom.xml                | Dependencies (Spring Web, JPA, MySQL, etc.)  |
 | README.md              | Project summary, tech used, run instructions |
 
----
+----
 
 
