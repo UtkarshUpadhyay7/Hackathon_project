@@ -19,7 +19,7 @@ It features real-time updates, clean UI/UX, and supports OAuth login for secure 
 - ⏰ **Expiry Date Tracking & Alerts**
 - 🧮 **Real-time Inventory Overview**
 - 🔍 **Search, Filter, and Sort Produts
-- 🗂️ **Export Inventory to Excel or PDF**
+  
 
 ---
 
@@ -27,10 +27,10 @@ It features real-time updates, clean UI/UX, and supports OAuth login for secure 
 
 | Layer         | Tech Used                          |
 |---------------|------------------------------------|
-| **Frontend**  | React.js, Tailwind CSS, TypeScript |
+| **Frontend**  | HTML, Tailwind CSS, JavaScript |
 | **Backend**   | Node.js or Java (Spring Boot)      |
 | **Database**  |  (MySQL)              |
-| **Other**     | GitHub Actions, pnpm, Vite         |
+| **Other**     | GitHub Actions,                    |
 
 ---
 
