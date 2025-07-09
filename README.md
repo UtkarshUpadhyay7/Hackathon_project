@@ -9,7 +9,7 @@
 
 **DoomShelf** is a smart inventory and expiry tracking desktop app built with modern technologies like **Java**, **SpringBoot**, and **MySql**. Designed for individuals, small businesses, and retailers, DoomShelf makes it easy to manage stock, get expiry alerts, and track products using barcodes or manual entry.
 
-It features real-time updates, clean UI/UX, and supports OAuth login for secure access.
+It features real-time updates, clean UI/UX, and supports product login for secure access.
 
 ---
 
