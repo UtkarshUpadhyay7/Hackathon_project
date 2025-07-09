@@ -1,226 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product Management | Expiry Tracker</title>
-    <script
-      src="https://unpkg.com/html5-qrcode"
-      type="text/javascript"
-    ></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-[#fefae0] text-[#2c3e50] font-sans">
-    <!-- Navbar -->
-    <nav
-      class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow"
-    >
-      <h1 class="text-xl font-bold">🛒 Product Management</h1>
-      <a href="index.html" class="text-white underline">← Back to Dashboard</a>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Management | Expiry Tracker</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fefae0] text-[#2c3e50] font-sans">
 
-    <!-- Status Message -->
-    <div id="message" class="text-center text-white font-bold py-2 hidden"></div>
+  <!-- ✅ Navbar -->
+  <nav class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow">
+    <h1 class="text-xl font-bold">🛒 Product Management</h1>
+    <a href="index.html" class="text-white underline">← Back to Dashboard</a>
+  </nav>
 
-    <!-- Buttons -->
-    <div class="flex justify-center gap-4 mt-6">
-      <a
-        href="entermanually.html"
-        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-      >
-        📝 Enter Manually
-      </a>
+  <!-- ✅ Action Buttons -->
+  <div class="flex justify-center gap-4 mt-8">
+    <a href="entermanually.html" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">📝 Enter Manually</a>
+    <a href="uploadqr.html" class="bg-purple-500 text-white px-6 py-2 rounded hover:bg-purple-600">📷 Upload QR Code</a>
+    <button onclick="showSection('delete')" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">🗑 Delete Product</button>
+  </div>
 
-      <a
-        href="uploadqr.html"
-        class="bg-purple-500 text-white px-6 py-2 rounded hover:bg-purple-600 text-center"
-      >
-        📷 Upload QR Code
-      </a>
+  <!-- ✅ Optional Animation -->
+  <div class="flex justify-center mt-10">
+    <img src="TROLLY.gif" alt="Loading" width="900" />
+  </div>
 
-      <button
-        onclick="showSection('delete')"
-        class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-      >
-        🗑 Delete Product
-      </button>
-    </div>
+  <!-- ✅ Delete Product Section -->
+  <div class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
+    <section id="delete" class="">
+      <h2 class="text-lg font-bold mb-4">🗑 Delete Product</h2>
+      <form id="deleteForm" class="flex gap-4">
+        <input type="text" id="deleteName" placeholder="Enter Product Name" class="w-full px-4 py-2 border rounded" />
+        <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Delete</button>
+      </form>
+    </section>
+  </div>
 
-    <br /><br /><br />
+  <!-- ✅ Hidden QR Upload -->
+  <input type="file" id="qr-file" accept="image/*" style="display: none" />
 
-    <img src="TROLLY.gif" alt="Animated GIF" width="1000" />
+  <!-- ✅ Script Section -->
+  <script>
+    // Show Delete Section Only
+    function showSection(id) {
+      document.getElementById("delete").classList.remove("hidden");
+    }
 
-    <div class="max-w-3xl mx-auto mt-8 space-y-10">
-      <!-- Manual Entry -->
-      <section id="manual" class="bg-white p-6 rounded-xl shadow hidden">
-        <h2 class="text-lg font-bold mb-4">📝 Manual Product Entry</h2>
-        <form id="manualForm" class="grid gap-4">
-          <input
-            type="text"
-            id="productName"
-            placeholder="Product Name *"
-            required
-            class="px-4 py-2 border rounded"
-          />
-          <input
-            type="date"
-            id="expiryDate"
-            required
-            class="px-4 py-2 border rounded"
-          />
-          <input
-            type="number"
-            id="quantity"
-            placeholder="Quantity *"
-            required
-            class="px-4 py-2 border rounded"
-          />
-          <button
-            type="submit"
-            class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
-          >
-            Save Product
-          </button>
-        </form>
-      </section>
+    // 🔥 QR Upload Hidden Listener (can be triggered manually)
+    document.getElementById("qr-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      <!-- QR Upload -->
-      <section id="qr" class="bg-white p-6 rounded-xl shadow hidden">
-        <h2 class="text-lg font-bold mb-4">📷 Upload QR Code Image</h2>
-        <input
-          type="file"
-          id="qr-file"
-          accept="image/*"
-          class="w-full p-2 border rounded"
-        />
-      </section>
+      const qrReader = new Html5Qrcode("qr-reader-temp");
+      qrReader.scanFile(file, true)
+        .then((decodedText) => {
+          const parts = decodedText.split("|");
 
-      <!-- Delete Product -->
-      <section id="delete" class="bg-white p-6 rounded-xl shadow hidden">
-        <h2 class="text-lg font-bold mb-4">🗑 Delete Product</h2>
-        <form id="deleteForm" class="flex gap-4">
-          <input
-            type="text"
-            id="deleteName"
-            placeholder="Enter Product Name"
-            class="w-full px-4 py-2 border rounded"
-          />
-          <button
-            type="submit"
-            class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-          >
-            Delete
-          </button>
-        </form>
-      </section>
-    </div>
+          if (parts.length !== 5) {
+            alert("❌ QR format invalid. Use: name|expiry|quantity|mfgDate|alertDays");
+            return;
+          }
 
-    <!-- Hidden QR container -->
-    <div id="qr-reader-temp" style="display: none"></div>
+          const product = {
+            name: parts[0],
+            expiryDate: parts[1],
+            quantity: parseInt(parts[2]),
+            manufacturingDate: parts[3],
+            alertDays: parseInt(parts[4]),
+            category: "Uncategorized",
+            price: 0.00,
+            supplier: "",
+            purchaseDate: null
+          };
 
-    <script>
-      // Show correct section
-      function showSection(id) {
-        ["manual", "qr", "delete"].forEach((sec) => {
-          document.getElementById(sec).classList.add("hidden");
-        });
-        document.getElementById(id).classList.remove("hidden");
-      }
-
-      // Show message
-      function showMessage(msg, type = "success") {
-        const el = document.getElementById("message");
-        el.textContent = msg;
-        el.className =
-          "text-center text-white font-bold py-2 " +
-          (type === "success" ? "bg-green-500" : "bg-red-500");
-        el.classList.remove("hidden");
-        setTimeout(() => el.classList.add("hidden"), 3000);
-      }
-
-      // On load, show manual section by default
-      window.onload = () => {
-        showSection("manual");
-      };
-
-      // Manual Form Submit
-      document.getElementById("manualForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const product = {
-          name: document.getElementById("productName").value,
-          expiryDate: document.getElementById("expiryDate").value,
-          quantity: parseInt(document.getElementById("quantity").value),
-        };
-
-        fetch("http://localhost:8080/api/products", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(product),
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error("Failed to add");
-            showMessage("✅ Product added to database!", "success");
-            e.target.reset();
+          fetch("http://localhost:8080/api/products/uploadQR", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product),
           })
-          .catch((err) => {
-            showMessage("❌ Error saving product", "error");
-            console.error(err);
-          });
-      });
-
-      // QR Upload
-      document.getElementById("qr-file").addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        if (typeof Html5Qrcode !== "undefined") {
-          const qrReader = new Html5Qrcode("qr-reader-temp");
-          qrReader
-            .scanFile(file, true)
-            .then((decoded) => {
-              const [name, expiryDate, quantity] = decoded.split("|");
-              const product = {
-                name,
-                expiryDate,
-                quantity: parseInt(quantity),
-              };
-
-              fetch("http://localhost:8080/api/products", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(product),
-              })
-                .then((res) => {
-                  if (!res.ok) throw new Error("Failed to add");
-                  showMessage("✅ Product added from QR!", "success");
-                  document.getElementById("qr-file").value = "";
-                })
-                .catch((err) => showMessage("❌ QR Upload Failed", "error"));
+            .then(res => res.text())
+            .then(message => {
+              alert(message); // 🎯 Display backend alert
             })
-            .catch(() => showMessage("❌ Invalid QR Code", "error"));
-        } else {
-          showMessage("❌ QR Scanner not available", "error");
-        }
-      });
-
-      // Delete Product
-      document.getElementById("deleteForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("deleteName").value.trim();
-        if (!name) return showMessage("⚠️ Enter valid product name", "error");
-
-        fetch(`http://localhost:8080/api/products/${name}`, {
-          method: "DELETE",
+            .catch(() => alert("❌ Failed to save product via QR"));
         })
-          .then((res) => {
-            if (res.ok) showMessage("🗑 Product deleted!", "success");
-            else throw new Error("Not found");
-          })
-          .catch(() => showMessage("❌ Deletion failed", "error"));
-      });
-    </script>
-  </body>
+        .catch(() => alert("❌ Unable to read QR code."));
+    });
+
+    // 🗑 Delete Product Logic
+    document.getElementById("deleteForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("deleteName").value.trim();
+      if (!name) return alert("⚠ Please enter a product name");
+
+      fetch(http://localhost:8080/api/products/${name}, {
+        method: "DELETE",
+      })
+        .then((res) => {
+          if (res.ok) alert("🗑 Product deleted successfully");
+          else throw new Error("Not found");
+        })
+        .catch(() => alert("❌ Deletion failed"));
+    });
+  </script>
+
+  <!-- ✅ Hidden QR Container -->
+  <div id="qr-reader-temp" style="display: none"></div>
+</body>
 </html>

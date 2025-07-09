@@ -116,23 +116,21 @@
           const totalValue = data.reduce((sum, p) => sum + p.quantity * 10, 0); // ₹10 per item
           const avgValue = total > 0 ? (totalValue / total).toFixed(2) : 0;
 
-         document.getElementById("totalProducts").innerText = total;
-document.getElementById("freshItems").innerText = fresh;
-document.getElementById("expiredItems").innerText = expired;
-document.getElementById("lowStockItems").innerText = lowStock;
-document.getElementById("warningItems").innerText = warning;
-document.getElementById("totalValue").innerText = `₹${totalValue}`;
+          document.getElementById("totalProducts").innerText = total;
+          document.getElementById("freshItems").innerText = fresh;
+          document.getElementById("expiredItems").innerText = expired;
+          document.getElementById("lowStockItems").innerText = lowStock;
+          document.getElementById("warningItems").innerText = warning;
+          document.getElementById("totalValue").innerText = ₹${totalValue};
 
-document.getElementById("qs-total").innerText = total;
-document.getElementById("qs-fresh").innerText = fresh;
-document.getElementById("qs-value").innerText = `₹${totalValue}`;
-document.getElementById("qs-avg").innerText = `₹${avgValue}`;
-
-
+          document.getElementById("qs-total").innerText = total;
+          document.getElementById("qs-fresh").innerText = fresh;
+          document.getElementById("qs-value").innerText = ₹${totalValue};
+          document.getElementById("qs-avg").innerText = ₹${avgValue};
         })
         .catch((err) => {
           console.error("❌ Error fetching data:", err);
         });
     </script>
-  </body>
+  </body>
 </html>
