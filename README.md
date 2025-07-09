@@ -31,18 +31,66 @@ It features real-time updates, clean UI/UX, and supports OAuth login for secure 
 |---------------|------------------------------------|
 | **Frontend**  | React.js, Tailwind CSS, TypeScript |
 | **Backend**   | Node.js or Java (Spring Boot)      |
-| **Database**  | Supabase (PostgreSQL)              |
-| **Desktop App**| Tauri (Rust + WebView)            |
-| **Auth**      | Supabase Auth (OAuth)              |
+| **Database**  |  (MySQL)              |
 | **Other**     | GitHub Actions, pnpm, Vite         |
 
 ---
 
 ## 📁 Folder Structure
 
-├── frontend/ # React + Tauri UI
-├── backend/ # Java Spring Boot or Node API
-├── public/ # Static files
-├── src-tauri/ # Tauri config (Rust)
+
+expiry-shelf-guardian-backend/
+│
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── expiryguardian/
+│       │           ├── controller/
+│       │           │   ├── ProductController.java
+│       │           │   └── AlertController.java
+│       │           │
+│       │           ├── model/
+│       │           │   ├── Product.java
+│       │           │   └── Alert.java
+│       │           │
+│       │           ├── repository/
+│       │           │   ├── ProductRepository.java
+│       │           │   └── AlertRepository.java
+│       │           │
+│       │           ├── service/
+│       │           │   ├── ProductService.java
+│       │           │   └── AlertService.java
+│       │           │
+│       │           └── ExpiryShelfGuardianApplication.java
+│       │
+│       └── resources/
+│           ├── application.properties
+│           └── data.sql (optional test data)
+│
+├── .gitignore
+├── pom.xml
 └── README.md
+
+
+---
+
+### 📂 Key File Purposes
+
+| File                     | Purpose                                      |
+| ------------------------ | -------------------------------------------- |
+| Product.java           | Entity class for products                    |
+| Alert.java             | Entity for expiry alerts                     |
+| ProductRepository.java | Interface for CRUD operations                |
+| AlertRepository.java   | Interface for alert handling                 |
+| ProductService.java    | Business logic: saving, checking expiry      |
+| AlertService.java      | Handles creation of alerts                   |
+| ProductController.java | APIs: /api/products, /uploadQR           |
+| AlertController.java   | Optional: for displaying alerts              |
+| application.properties | DB config, port, JPA settings                |
+| pom.xml                | Dependencies (Spring Web, JPA, MySQL, etc.)  |
+| README.md              | Project summary, tech used, run instructions |
+
+---
+
 
