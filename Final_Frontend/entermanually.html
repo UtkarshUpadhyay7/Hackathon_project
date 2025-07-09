@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Enter Manually | Expiry Wise Shelf Guardian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gradient-to-br from-green-50 via-white to-green-100 text-[#2c3e50] font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 flex justify-between items-center rounded-b-xl shadow">
+      <div class="text-xl font-bold">Expiry Wise Shelf Guardian</div>
+      <div class="text-sm italic">Smart inventory management with database storage</div>
+    </nav>
+
+    <!-- Centered Form -->
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Add New Product</h2>
+          <button onclick="window.history.back()">✖</button>
+        </div>
+
+        <form id="manualForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" id="productName" placeholder="Product Name *" required class="w-full px-4 py-2 border rounded" />
+          <select id="category" required class="w-full px-4 py-2 border rounded">
+            <option value="">Select category</option>
+            <option value="Food">Food</option>
+            <option value="Beverage">Beverage</option>
+            <option value="Medicine">Medicine</option>
+            <option value="Cosmetic">Cosmetic</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" id="supplier" placeholder="Supplier Name" class="w-full px-4 py-2 border rounded" />
+          <input type="number" id="price" placeholder="Price (₹)" value="0" required class="w-full px-4 py-2 border rounded" />
+          <input type="number" id="quantity" placeholder="Quantity *" value="1" required class="w-full px-4 py-2 border rounded" />
+          <input type="date" id="purchaseDate" class="w-full px-4 py-2 border rounded" />
+          <input type="date" id="expiryDate" required class="w-full px-4 py-2 border rounded" />
+          <select id="alertDays" class="w-full px-4 py-2 border rounded">
+            <option value="3">3 days</option>
+            <option value="5">5 days</option>
+            <option value="7" selected>7 days</option>
+            <option value="10">10 days</option>
+            <option value="15">15 days</option>
+          </select>
+
+          <div class="col-span-1 md:col-span-2 flex justify-center mt-4 gap-4">
+            <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 shadow">💾 Save Product</button>
+            <button type="button" onclick="window.history.back()" class="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Popup -->
+    <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+        <h2 class="text-lg font-semibold mb-4" id="popupTitle">🔔 Alert</h2>
+        <p class="mb-4" id="popupMessage">This is a popup message</p>
+        <div class="text-right">
+          <button onclick="closePopup()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+      document.getElementById("purchaseDate").valueAsDate = new Date();
+
+      const showPopup = (title, message) => {
+        document.getElementById("popupTitle").innerText = title;
+        document.getElementById("popupMessage").innerText = message;
+        document.getElementById("popupModal").classList.remove("hidden");
+      };
+
+      const closePopup = () => {
+        document.getElementById("popupModal").classList.add("hidden");
+      };
+
+      document.getElementById("manualForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const data = {
+          name: document.getElementById("productName").value,
+          category: document.getElementById("category").value,
+          supplier: document.getElementById("supplier").value,
+          price: parseFloat(document.getElementById("price").value),
+          quantity: parseInt(document.getElementById("quantity").value),
+          purchaseDate: document.getElementById("purchaseDate").value,
+          expiryDate: document.getElementById("expiryDate").value,
+          alertDays: parseInt(document.getElementById("alertDays").value),
+        };
+
+        try {
+          const res = await fetch("http://localhost:8080/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          if (!res.ok) throw new Error("Failed to save");
+
+          const result = await res.text();
+
+          // Show alert if backend returned one
+          if (result.includes("⚠️ ALERT")) {
+            showPopup("⚠️ Expiry Alert", result);
+          } else {
+            showPopup("✅ Success", "Product saved successfully!");
+          }
+
+          e.target.reset();
+        } catch (err) {
+          console.error(err);
+          showPopup("❌ Error", "Error saving product!");
+        }
+      });
+    </script>
+  </body>
+</html>

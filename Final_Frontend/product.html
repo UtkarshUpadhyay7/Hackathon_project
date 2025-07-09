@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Management | Expiry Tracker</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fefae0] text-[#2c3e50] font-sans">
+
+  <!-- ✅ Navbar -->
+  <nav class="bg-gradient-to-r from-green-600 to-teal-500 text-white px-6 py-4 flex justify-between items-center shadow">
+    <h1 class="text-xl font-bold">🛒 Product Management</h1>
+    <a href="index.html" class="text-white underline">← Back to Dashboard</a>
+  </nav>
+
+  <!-- ✅ Action Buttons -->
+  <div class="flex justify-center gap-4 mt-8">
+    <a href="entermanually.html" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">📝 Enter Manually</a>
+    <a href="uploadqr.html" class="bg-purple-500 text-white px-6 py-2 rounded hover:bg-purple-600">📷 Upload QR Code</a>
+    <button onclick="showSection('delete')" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">🗑 Delete Product</button>
+  </div>
+
+  <!-- ✅ Optional Animation -->
+  <div class="flex justify-center mt-10">
+    <img src="TROLLY.gif" alt="Loading" width="900" />
+  </div>
+
+  <!-- ✅ Delete Product Section -->
+  <div class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
+    <section id="delete" class="">
+      <h2 class="text-lg font-bold mb-4">🗑 Delete Product</h2>
+      <form id="deleteForm" class="flex gap-4">
+        <input type="text" id="deleteName" placeholder="Enter Product Name" class="w-full px-4 py-2 border rounded" />
+        <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Delete</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- ✅ Hidden QR Upload -->
+  <input type="file" id="qr-file" accept="image/*" style="display: none" />
+
+  <!-- ✅ Script Section -->
+  <script>
+    // Show Delete Section Only
+    function showSection(id) {
+      document.getElementById("delete").classList.remove("hidden");
+    }
+
+    // 🔥 QR Upload Hidden Listener (can be triggered manually)
+    document.getElementById("qr-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const qrReader = new Html5Qrcode("qr-reader-temp");
+      qrReader.scanFile(file, true)
+        .then((decodedText) => {
+          const parts = decodedText.split("|");
+
+          if (parts.length !== 5) {
+            alert("❌ QR format invalid. Use: name|expiry|quantity|mfgDate|alertDays");
+            return;
+          }
+
+          const product = {
+            name: parts[0],
+            expiryDate: parts[1],
+            quantity: parseInt(parts[2]),
+            manufacturingDate: parts[3],
+            alertDays: parseInt(parts[4]),
+            category: "Uncategorized",
+            price: 0.00,
+            supplier: "",
+            purchaseDate: null
+          };
+
+          fetch("http://localhost:8080/api/products/uploadQR", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product),
+          })
+            .then(res => res.text())
+            .then(message => {
+              alert(message); // 🎯 Display backend alert
+            })
+            .catch(() => alert("❌ Failed to save product via QR"));
+        })
+        .catch(() => alert("❌ Unable to read QR code."));
+    });
+
+    // 🗑 Delete Product Logic
+    document.getElementById("deleteForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("deleteName").value.trim();
+      if (!name) return alert("⚠️ Please enter a product name");
+
+      fetch(`http://localhost:8080/api/products/${name}`, {
+        method: "DELETE",
+      })
+        .then((res) => {
+          if (res.ok) alert("🗑 Product deleted successfully");
+          else throw new Error("Not found");
+        })
+        .catch(() => alert("❌ Deletion failed"));
+    });
+  </script>
+
+  <!-- ✅ Hidden QR Container -->
+  <div id="qr-reader-temp" style="display: none"></div>
+</body>
+</html>
